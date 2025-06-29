@@ -219,6 +219,15 @@ attackthree=3)";
 void mainGame(Vector3 cubePosition, Camera3D& camera) {
     float deltaTime = GetFrameTime();
 
+    std::cout << "X: " << camera.position.x << std::endl;
+    std::cout << "Y: " << camera.position.y << std::endl;
+    std::cout << "Z: " << camera.position.z << std::endl;
+
+    if (camera.position.x <= 0) camera.position.x = 0;
+    if (camera.position.z <= 0) camera.position.z = 0;
+
+    if (camera.position.x >= 24) camera.position.x = 24;
+
     // --- 重力とジャンプの物理演算 ---
     cameraVelocityY -= gravity * deltaTime;
 
@@ -245,10 +254,7 @@ void mainGame(Vector3 cubePosition, Camera3D& camera) {
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
 
-    DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
-    DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
-
-    DrawGrid(10, 1.0f);
+    DrawGrid(100, 0.5f);
 
     EndMode3D();
     DrawFPS(10, 10);
