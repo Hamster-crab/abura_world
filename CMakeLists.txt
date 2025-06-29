@@ -18,7 +18,13 @@ project(main CXX) # プロジェクト名と使用する言語を指定
 find_package(raylib CONFIG REQUIRED) # raylibの設定ファイルを探します
 
 # 実行可能ファイルを生成
-add_executable(${PROJECT_NAME} src/main.cpp) # main.cをビルドして実行可能ファイルを作成
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/include # <-- ここで 'include' ディレクトリを追加
+)
 
 # raylibライブラリにリンク
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

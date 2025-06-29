@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/kitanohideaki/git/abura_world/include
 
 CXX_FLAGS = -I/usr/include
 
