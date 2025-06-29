@@ -130,7 +130,9 @@ PlayerData loadGame(const std::filesystem::path& filepath) { // <-- ここを変
 }
 
 void drawTitle(Font myFont, bool& title) {
-    ShowCursor();
+    if (IsCursorHidden()) {
+        EnableCursor();
+    }
     saveDir = GetSaveGameDirectory();
     savePath = saveDir / "save.txt";
 
@@ -214,7 +216,7 @@ attackthree=3)";
 }
 
 void mainGame(Vector3 cubePosition, Camera3D& camera) {
-    HideCursor();
+    if (IsCursorOnScreen()) DisableCursor();
     float deltaTime = GetFrameTime();
 
     // --- 重力とジャンプの物理演算 ---
