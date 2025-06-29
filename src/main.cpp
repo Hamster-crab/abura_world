@@ -23,9 +23,9 @@ std::filesystem::path savePath;
 PlayerData inGamePlayerData;
 
 static float cameraVelocityY = 0.0f;    // カメラのY方向の速度
-static float jumpStrength = 1.0f;     // ジャンプの強さ (上向き)
-static float gravity = 3.2f;           // 重力加速度 (下向き)
-static float terminalVelocity = 6.0f; // 落下速度の最大値
+static float jumpStrength = 8.0f;     // ジャンプの強さ (上向き)
+static float gravity = 13.2f;           // 重力加速度 (下向き)
+static float terminalVelocity = 30.0f; // 落下速度の最大値
 static bool canJump = true;            // ジャンプできるかどうか (地面にいるか)
 static float groundY = 1.0f;
 
@@ -168,6 +168,7 @@ void drawTitle(Font myFont, bool& title) {
     if (mouseX >= startPosX && mouseX <= startPosX+24*5 && mouseY >= startPosY && mouseY <= startPosY+24) {
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             inGamePlayerData = loadGame(savePath);
+            DisableCursor();
             title = false;
         }
         DrawRectangleLines(startPosX, startPosY, 24*5, 24, {255, 0, 0, 255});
@@ -216,43 +217,29 @@ attackthree=3)";
 }
 
 void mainGame(Vector3 cubePosition, Camera3D& camera) {
-    if (IsCursorOnScreen()) DisableCursor();
     float deltaTime = GetFrameTime();
 
     // --- 重力とジャンプの物理演算 ---
+    cameraVelocityY -= gravity * deltaTime;
 
-    // 1. 重力の適用
-    // 下方向に速度を加算 (Y軸は通常上方向が正、下方向が負なので、重力は正の値を加える)
-    cameraVelocityY -= gravity * deltaTime; // 重力でY速度を減少させる (下方向への加速)
-
-    // 2. 落下速度の制限 (ターミナルベロシティ)
-    // 落下が速くなりすぎないように制限
     if (cameraVelocityY < -terminalVelocity) {
         cameraVelocityY = -terminalVelocity;
     }
 
-    // 3. ジャンプ入力
-    // スペースキーが押され、かつジャンプ可能な場合
     if (IsKeyPressed(KEY_SPACE) && canJump) {
-        cameraVelocityY = jumpStrength; // 上向きに速度を設定
-        canJump = false; // ジャンプ中は再ジャンプ不可
+        cameraVelocityY = jumpStrength;
+        canJump = false;
     }
 
-    // 4. カメラ位置の更新
-    camera.position.y += cameraVelocityY; // 速度を直接加算する (deltaTimeは速度計算に含める)
+    camera.position.y += cameraVelocityY * deltaTime;
 
-    // 5. 地面との衝突判定 (または最低高度の維持)
     if (camera.position.y <= groundY) {
-        camera.position.y = groundY;   // 地面に固定
-        cameraVelocityY = 0.0f;        // Y方向の速度をリセット
-        canJump = true;                // 地面にいるのでジャンプ可能
+        camera.position.y = groundY;
+        cameraVelocityY = 0.0f;
+        canJump = true;
     }
 
-    // デバッグ出力
-    // std::cout << "Camera Y: " << camera.position.y << ", Velocity Y: " << cameraVelocityY << ", Can Jump: " << canJump << std::endl;
-
-    // --- Raylib カメラの更新と描画 ---
-    UpdateCamera(&camera, CAMERA_FIRST_PERSON); // カメラの視点移動など (キー入力による)
+    UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -261,12 +248,13 @@ void mainGame(Vector3 cubePosition, Camera3D& camera) {
     DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
     DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
 
-    DrawGrid(10, 1.0f); // 地面のようなグリッドを描画
+    DrawGrid(10, 1.0f);
 
     EndMode3D();
-    DrawFPS(10, 10); // フレームレート表示
+    DrawFPS(10, 10);
     EndDrawing();
 }
+
 
 int main(void)
 {
