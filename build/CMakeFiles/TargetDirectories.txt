@@ -1,0 +1,3 @@
+/home/kitanohideaki/git/abura_world/build/CMakeFiles/main.dir
+/home/kitanohideaki/git/abura_world/build/CMakeFiles/edit_cache.dir
+/home/kitanohideaki/git/abura_world/build/CMakeFiles/rebuild_cache.dir

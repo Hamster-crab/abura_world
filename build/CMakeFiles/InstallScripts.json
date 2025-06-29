@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/kitanohideaki/git/abura_world/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

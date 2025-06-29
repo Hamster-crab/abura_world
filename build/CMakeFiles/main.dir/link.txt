@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/main.dir/link.d CMakeFiles/main.dir/src/main.cpp.o -o main  /usr/lib/libraylib.so -lm -lpthread -ldl -lrt -L/usr/lib -lraylib
